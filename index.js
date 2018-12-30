@@ -57,6 +57,7 @@ const server = http
         const payloadString = JSON.stringify(payload) //Convert payload to string
 
         // Return response
+        res.setHeader('Content-Type', 'application/json')
         res.writeHead(statusCode)
         res.end(payloadString)
 
