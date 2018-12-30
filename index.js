@@ -4,6 +4,21 @@ const StringDecoder = require('string_decoder').StringDecoder
 
 const log = (arg) => console.log(arg)
 
+const handlers = {} // Defining the router
+
+handlers.sample = (data, callback) => {
+  // Callback http status code and payload object
+  callback(406, { name: 'sample handler' })
+}
+
+handlers.notFound = (data, callback) => {
+  callback(404)
+}
+
+const router = {
+  sample: handlers.sample,
+} // Defining the router
+
 const server = http
   .createServer((req, res) => {
     const parsedUrl = url.parse(req.url, true) //Parsing url
@@ -22,15 +37,41 @@ const server = http
     req.on('end', () => {
       buffer += decoder.end()
 
-      res.end('NODE JS MASTERCLASS')
+      const chosenHandler =
+        typeof router[trimmedPath] !== 'undefined'
+          ? router[trimmedPath]
+          : handlers.notFound
 
-      log({
-        'requested at': trimmedPath,
-        'with method': method,
-        'with headers': headers,
-        'with payload': buffer,
-        'and query parameters': queryStringObject,
-      })
+      const data = {
+        trimmedPath,
+        queryStringObject,
+        method,
+        headers,
+        payload: buffer,
+      } // Data Object to send upon request
+
+      chosenHandler(data, (statusCode, payload) => {
+        statusCode = typeof statusCode === 'number' ? statusCode : 200 //Use the status code called back by the handler or default to 200
+        payload = typeof payload === 'object' ? payload : {} // Use the payload called back by handler of default to empty object
+
+        const payloadString = JSON.stringify(payload) //Convert payload to string
+
+        // Return response
+        res.writeHead(statusCode)
+        res.end(payloadString)
+
+        log({
+          'requested at': trimmedPath,
+          'with method': method,
+          'with headers': headers,
+          'with payload': buffer,
+          'and query parameters': queryStringObject,
+          response: {
+            statusCode,
+            payloadString,
+          },
+        })
+      }) // Route the request to the handler specified on the router
     })
   })
 
