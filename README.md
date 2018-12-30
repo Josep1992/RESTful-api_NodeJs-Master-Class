@@ -1,5 +1,12 @@
 > # Building a RESTful API with plain NodeJS
 
+> #### You will need nodeJS installed on your computer [Download Here 😎](https://nodejs.org/en/)
+
+```
+To Start API run on terminal:
+node index.js
+```
+
 - Basic Scaffolding
 - Starting a Server
 - Parsing Request Paths
@@ -21,3 +28,5 @@
 - Background Workers
 - Logging to Files
 - Logging to the Console
+
+**This code is property of [Pirple Thinkific](https://pirple.thinkific.com/)**
