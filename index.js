@@ -1,5 +1,6 @@
 const http = require('http')
 const url = require('url')
+const { PORT } = (config = require('./config'))
 const StringDecoder = require('string_decoder').StringDecoder
 
 const log = (arg) => console.log(arg)
@@ -76,6 +77,6 @@ const server = http
     })
   })
 
-  .listen(3000, (err) => {
-    if (!err) console.log(`Server started on port: %s`, 3000)
+  .listen(PORT, (err) => {
+    if (!err) console.log(`Server started on port: %s`, PORT)
   })
