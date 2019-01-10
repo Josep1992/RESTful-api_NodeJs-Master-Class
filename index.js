@@ -1,6 +1,6 @@
 const http = require('http')
 const url = require('url')
-const { PORT } = (config = require('./config'))
+const { PORT, envNAME } = (config = require('./config'))
 const StringDecoder = require('string_decoder').StringDecoder
 
 const log = (arg) => console.log(arg)
@@ -38,10 +38,7 @@ const server = http
     req.on('end', () => {
       buffer += decoder.end()
 
-      const chosenHandler =
-        typeof router[trimmedPath] !== 'undefined'
-          ? router[trimmedPath]
-          : handlers.notFound
+      const chosenHandler = typeof router[trimmedPath] !== 'undefined' ? router[trimmedPath] : handlers.notFound
 
       const data = {
         trimmedPath,
@@ -78,5 +75,5 @@ const server = http
   })
 
   .listen(PORT, (err) => {
-    if (!err) console.log(`Server started on port: %s`, PORT)
+    if (!err) console.log(`Server started on port: ${PORT} in ${envNAME} mode`)
   })
