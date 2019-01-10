@@ -9,17 +9,16 @@ const log = (arg) => console.log(arg)
 
 const handlers = {} // Defining the router
 
-handlers.sample = (data, callback) => {
-  // Callback http status code and payload object
-  callback(406, { name: 'sample handler' })
-}
-
 handlers.notFound = (data, callback) => {
   callback(404)
 }
 
+handlers.ping = (data, callback) => {
+  callback(200)
+}
+
 const router = {
-  sample: handlers.sample,
+  ping: handlers.ping,
 } // Defining the router
 
 const unifiedServer = function(req, res) {
